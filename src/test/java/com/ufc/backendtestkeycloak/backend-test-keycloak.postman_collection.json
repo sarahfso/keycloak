@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "e4cb4e5f-5d60-46d6-a7c5-0d03c004381c",
+		"name": "backend-test-keycloak",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "crud",
+			"item": [
+				{
+					"name": "read produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/produtos/{{id_produto_test}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"produtos",
+								"{{id_produto_test}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"id_produto_test\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"marmita\",\n    \"descricao\":\"arroz, feijao e batata\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/produtos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"marmita_alterado\",\n    \"descricao\":\"arroz, feijao e batata\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8090/produtos/{{id_produto_test}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"produtos",
+								"{{id_produto_test}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/produtos/{{id_produto_test}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"produtos",
+								"{{id_produto_test}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "get token administrador",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"access_token\", pm.response.json().access_token);",
+									"pm.environment.set(\"refresh_token\", pm.response.json().refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "default"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "default"
+								},
+								{
+									"key": "username",
+									"value": "{{username_role_administrador}}",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "{{password_role_administrador}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL_keycloak}}/realms/{{realm}}/protocol/openid-connect/token",
+							"host": [
+								"{{URL_keycloak}}"
+							],
+							"path": [
+								"realms",
+								"{{realm}}",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get token cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"access_token\", pm.response.json().access_token);",
+									"pm.environment.set(\"refresh_token\", pm.response.json().refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "default"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "default"
+								},
+								{
+									"key": "username",
+									"value": "{{username_role_cliente}}",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "{{password_role_cliente}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL_keycloak}}/realms/{{realm}}/protocol/openid-connect/token",
+							"host": [
+								"{{URL_keycloak}}"
+							],
+							"path": [
+								"realms",
+								"{{realm}}",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: backend-keycloak-db
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: backend-test-keycloak
+    ports:
+      - 6543:5432
+    volumes:
+      - backend-test-keycloak:/var/lib/postgresql/data
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.1
+    container_name: keycloak-container
+    ports:
+      - 8080:8080
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: backend-keycloak-db
+      DB_DATABASE: keycloak-db
+      DB_USER: postgres
+      DB_SCHEMA: public
+      DB_PASSWORD: postgres
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
+    depends_on:
+      - postgres
+volumes:
+  backend-test-keycloak:
+    name: backend-test-keycloak
